@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}Profile{% endblock title %}
+
+{% block body %}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="text-center mt-5">
+                <img src="{{request.user.profile.image.url}}" class="img-fluid rounded-circle mb-3" alt="profile" width="200" height="200">
+                {% if request.user.first_name and request.user.last_name %}
+                <h3>{{request.user.first_name}} {{request.user.last_name}}</h3>
+                {% endif %}
+                <h4>@{{request.user.username}}</h4>
+
+                {% if request.user.profile.bio %}
+                <p>{{request.user.profile.bio}}</p>
+                {% endif %}
+
+                <a href="{% url 'update-profile' %}">Edit Profile</a>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <h2 class=" mt-5">Activity Log</h2>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <h3 class=" mt-5">{{posts.count}} Post{{posts.count|pluralize}}</h3>
+                    {% for post in posts %}
+                    <div class="mt-3 mb-3">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <h4>@{{post.author}} | <small>{{post.created|timesince}} ago.</small></h4>
+                                <h6>{{post.title}}</h6>
+                                <p>{{post.content}}</p>
+                                <a href="{% url 'view-post' post.id %}" >View full post</a> <small>({{post.comment_set.count}} comment{{ post.comment_set.count|pluralize }})</small>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <div class="col-md-6">
+                    <h3 class="mt-5">{{comments.count}} Comment{{comments.count|pluralize}}</h3>
+                    {% for comment in comments %}
+                    <div class="mt-3 mb-3">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <h4>@{{comment.commenter}} | <small>{{comment.created|timesince}} ago.</small></h4>
+                                <p>{{comment.body}}</p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+{% endblock body %}

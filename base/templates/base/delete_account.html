@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block title %}Delete Account{% endblock title %}
+
+{% block body %}
+
+<div class="text-center">
+    <a href="{% url 'delete-profile' %}" class="btn btn-danger mt-5 me-5">Delete Account Permanently</a>
+    <a href="{% url 'home' %}" class="btn btn-light mt-5">Go Back</a>
+
+</div>
+
+{% endblock body %}

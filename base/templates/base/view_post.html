@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+
+
+{% load static %}
+
+{% block title %}Blog Post{% endblock title %}
+
+{% block body %}
+
+<div class="container mt-5">
+    <div class="row">
+        <!-- Post and Text Area -->
+        <div class="col-md-6">
+            <div class="d-flex  position-relative mt-3 mb-3">
+                <img src="{{post.author.profile.image.url}}" class="flex-shrink-0 me-3  rounded-circle" alt="profile" width="100" height="100">
+                <div>
+                    <h5 class="mt-0">@{{post.author}} | <small>{{post.created|timesince}} ago.</small></h5>
+                    <h6>{{post.title}}</h6>
+                    <p>{{post.content}}</p>
+                    {% if request.user == post.author %}
+                    <a href="{% url 'update-post' post.id %}" class="btn btn-light">Edit</a>
+                    <a href="{% url 'delete-post' post.id %}" class="btn btn-danger">Delete</a>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="container d-flex  align-items-center" >
+                <form action="" method="post" class="row">
+                    <label for="exampleFormControlTextarea1" class="form-label">Add a comment:</label>
+                    {% csrf_token %}
+                    {% for field in form %}
+                    <div class="col-md-12">
+                        {{field|add_class:"form-control"}}
+                    </div>
+                    {% endfor %}
+                    <div class="col-md-12 d-flex justify-content-start">
+                        <button type="submit" class="btn btn-primary m-3">Post</button>
+                    </div>
+                </form>
+                <hr>
+            </div>
+        </div>
+
+        <!-- Comments -->
+        <div class="col-md-6">
+            {% if comments %}
+            <h3 class=" m-5">{{comments.count}} Comment{{ comments.count|pluralize }}:</h3>
+            {% else %}
+            <h3 class=" m-5">No comments yet.</h3>
+            {% endif %}
+            {% for comment in comments %}
+            <div class="d-flex  position-relative mt-3 mb-3">
+                <a href="{% url 'user-profile' comment.commenter.id %}"> <img src="{{comment.commenter.profile.image.url}}" class="flex-shrink-0 me-3  rounded-circle" alt="profile" width="60" height="60"></a>
+                <div>
+                    <h5 class="mt-0">@{{comment.commenter}} | <small>{{comment.created|timesince}} ago.</small></h5>
+                    <p>{{comment.body}}</p>
+                    {% if request.user == comment.commenter %}
+                    <a href="{% url 'delete-comment' post.id comment.id %}" class="btn btn-danger">Delete</a>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+
+{% endblock body %}

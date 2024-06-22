@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}
+Delete Object
+{% endblock title %}
+
+{% block body %}
+
+{% if page == 'delete_account' %}
+<h2 class="text-center mt-5">Are you sure you want to delete "@{{obj}}"</h2>
+{% else %}
+<h2 class="text-center mt-5">Are you sure you want to delete "{{obj}}"</h2>
+{% endif %}
+
+
+<form action="" method='POST' class="d-flex justify-content-center">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger m-3">Delete</button>
+    <a href="{{request.META.HTTP_REFERER}}" class="btn btn-light m-3">Cancel</a>
+</form>
+</form>
+
+{% endblock body %}
